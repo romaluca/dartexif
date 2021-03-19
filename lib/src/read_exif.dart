@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'exifheader.dart';
-import 'util.dart';
-import 'linereader.dart';
 import 'exif_types.dart';
+import 'exifheader.dart';
 import 'file_interface.dart';
+import 'linereader.dart';
+import 'util.dart';
 
 int _increment_base(data, base) {
   return (data[base + 2]) * 256 + (data[base + 3]) + 2;
@@ -13,8 +13,8 @@ int _increment_base(data, base) {
 // Process an image file data.
 // This is the function that has to deal with all the arbitrary nasty bits
 // of the EXIF standard.
-Future<Map<String, IfdTag>> readExifFromBytes(List<int> bytes,
-    {String stop_tag,
+Future<Map<String, IfdTag>?> readExifFromBytes(List<int> bytes,
+    {String? stop_tag,
     bool details = true,
     bool strict = false,
     bool debug = false,
@@ -30,8 +30,8 @@ Future<Map<String, IfdTag>> readExifFromBytes(List<int> bytes,
 }
 
 // Streaming version of [readExifFromBytes].
-Future<Map<String, IfdTag>> readExifFromFile(dynamic file,
-    {String stop_tag,
+Future<Map<String, IfdTag>?> readExifFromFile(dynamic file,
+    {String? stop_tag,
     bool details = true,
     bool strict = false,
     bool debug = false,
@@ -51,8 +51,8 @@ Future<Map<String, IfdTag>> readExifFromFile(dynamic file,
 // Process an image file (expects an open file object).
 // This is the function that has to deal with all the arbitrary nasty bits
 // of the EXIF standard.
-Map<String, IfdTag> readExifFromFileReader(FileReader f,
-    {String stop_tag,
+Map<String, IfdTag>? readExifFromFileReader(FileReader f,
+    {String? stop_tag,
     bool details = true,
     bool strict = false,
     bool debug = false,
@@ -254,10 +254,10 @@ Map<String, IfdTag> readExifFromFileReader(FileReader f,
     ctr += 1;
   }
   // EXIF IFD
-  IfdTagImpl exif_off = hdr.tags['Image ExifOffset'];
+  IfdTagImpl? exif_off = hdr.tags['Image ExifOffset'] as IfdTagImpl?;
   if (exif_off != null && ![1, 2, 5, 6, 10].contains(exif_off.field_type)) {
     // print('** Exif SubIFD at offset ${exif_off.values[0]}:');
-    hdr.dump_ifd(exif_off.values[0], 'EXIF', stop_tag: stop_tag);
+    hdr.dump_ifd(exif_off.values![0], 'EXIF', stop_tag: stop_tag);
   }
 
   // deal with MakerNote contained in EXIF IFD
@@ -281,7 +281,8 @@ Map<String, IfdTag> readExifFromFileReader(FileReader f,
     // Easy we already have them
     if (hdr.tags.containsKey('Image ApplicationNotes')) {
       // print('** XMP present in Exif');
-      xmp_string = make_string(hdr.tags['Image ApplicationNotes'].values);
+      xmp_string =
+          make_string(hdr.tags['Image ApplicationNotes']!.values as List<int>);
       // We need to look in the entire file for the XML
     } else {
       // print('** XMP not in Exif, searching file for XMP info...');

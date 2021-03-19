@@ -1,12 +1,14 @@
 // library dartexif.test.test_util;
 
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io' as io;
+
 // import 'dart:mirrors';
 import 'package:archive/archive.dart';
-import 'dart:io' as io;
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
+
 import 'sample_file.dart';
 
 Stream<SampleFile> readSamples() async* {
@@ -25,7 +27,7 @@ Stream<SampleFile> readSamples() async* {
 
   if (!await io.File(path).exists()) {
     print('downloading $path ..');
-    var res = await http.get(url);
+    var res = await http.get(Uri.parse(url));
     await io.File(path).writeAsBytes(res.bodyBytes);
   }
 

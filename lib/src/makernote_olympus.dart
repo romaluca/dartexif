@@ -1,6 +1,7 @@
 import 'package:sprintf/sprintf.dart' show sprintf;
-import 'util.dart';
+
 import 'tags_info.dart' show MakerTag, MakerTagFunc, tags_base;
+import 'util.dart';
 
 // Makernote (proprietary) tag definitions for olympus.
 
@@ -14,7 +15,7 @@ class makernote_olympus extends tags_base {
       MakerTag.makeWithFunc(name, func);
 
   // decode Olympus SpecialMode tag in MakerNote
-  static String _special_mode(List<int> v) {
+  static String _special_mode(List<int>? v) {
     Map<int, String> mode1 = {
       0: 'Normal',
       1: 'Unknown',
@@ -33,8 +34,7 @@ class makernote_olympus extends tags_base {
       return '';
     }
 
-    if (v == null ||
-        v.length < 3 ||
+    if (v.length < 3 ||
         (!mode1.containsKey(v[0]) || !mode2.containsKey(v[2]))) {
       return v.toString();
     }

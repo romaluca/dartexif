@@ -1,5 +1,6 @@
-import 'package:args/args.dart';
 import 'dart:io';
+
+import 'package:args/args.dart';
 import 'package:exif/exif.dart';
 
 // Show command line usage.
@@ -20,7 +21,7 @@ main(List<String> arguments) async {
   exitCode = 0;
 
   bool detailed = true;
-  String stop_tag = null;
+  String? stop_tag = null;
   bool debug = false;
   bool strict = false;
 
@@ -41,7 +42,7 @@ main(List<String> arguments) async {
       debug = v;
     });
 
-  List<String> args;
+  List<String> args = [];
 
   try {
     args = parser.parse(arguments).rest;
@@ -69,14 +70,14 @@ main(List<String> arguments) async {
 }
 
 printExifOf(String path, printFunc(String),
-    {String stop_tag = null,
+    {String? stop_tag = null,
     bool details = true,
     bool strict = false,
     bool debug = false}) async {
   // Map<String, IfdTag> data = await readExifFromBytes(await new File(path).readAsBytes(),
   //     stop_tag: stop_tag, details: true, strict: false, debug: false);
 
-  Map<String, IfdTag> data = await readExifFromBytes(
+  Map<String, IfdTag>? data = await readExifFromBytes(
       File(path).readAsBytesSync(),
       stop_tag: stop_tag,
       details: true,
@@ -102,7 +103,7 @@ printExifOf(String path, printFunc(String),
 
   for (String key in tag_keys) {
     // try {
-    printFunc("$key (${data[key].tagType}): ${data[key]}");
+    printFunc("$key (${data[key]!.tagType}): ${data[key]}");
     // } catch (e) {
     //   printFunc("$i : ${data[i]}");
     // }

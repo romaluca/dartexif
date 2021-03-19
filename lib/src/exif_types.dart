@@ -8,7 +8,7 @@ abstract class IfdTag {
   String get printable;
 
   // list of data items (int(char or number) or Ratio)
-  List get values;
+  List? get values;
 }
 
 // Ratio object that eventually will be able to reduce itself to lowest

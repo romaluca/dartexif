@@ -1,9 +1,21 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
+
+import 'package:json_annotation/json_annotation.dart';
+
 part 'sample_file.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable()
 class SampleFile {
+  SampleFile(
+      {required this.name,
+      required this.hasError,
+      List<int>? content,
+      this.encodedContent = ''}) {
+    if (content != null) {
+      setContent(content);
+    }
+  }
+
   String name;
   String encodedContent;
   String hasError;
@@ -11,12 +23,6 @@ class SampleFile {
   List<int> getContent() => base64.decode(encodedContent);
   setContent(List<int> v) {
     encodedContent = base64.encode(v);
-  }
-
-  SampleFile({this.name, this.hasError, List<int> content}) {
-    if (content != null) {
-      setContent(content);
-    }
   }
 
   factory SampleFile.fromJson(Map<String, dynamic> json) =>
